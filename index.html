@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Despachador</title>
+</head>
+
+<body>
+  <script src="main.js"></script>
+  <div class="container">
+    <div class="Entorno">
+      <h2>Entorno</h2>
+      <div class="grid">
+        <div class="item">
+          <label for="numero-procesadores">Número de Procesadores</label>
+          <input type="number" id="numero-procesadores">
+        </div>
+        <div class="item">
+          <label for="quantum">Quantum</label>
+          <input type="number" id="quantum">
+        </div>
+        <div class="item">
+          <label for="bloqueo">Tiempo de bloqueo</label>
+          <input type="number" id="bloqueo">
+        </div>
+        <div class="item">
+          <label for="tcc">Tiempo cambio contexto</label>
+          <input type="number" id="tcc">
+        </div>
+      </div>
+      <button onclick="crearEntorno()">Crear entorno</button>
+    </div>
+
+    <div id="cola-procesos" class=""></div>
+
+    <div class="Procesos">
+      <h2>Procesos</h2>
+      <div class="grid">
+        <div class="item">
+          <label for="id">Nombre</label>
+          <input type="text" id="id">
+        </div>
+        <div class="item">
+          <label for="tiempo-ejecucion">Tiempo ejecución</label>
+          <input type="number" id="tiempo-ejecucion">
+        </div>
+        <div class="item">
+          <label for="numero-bloqueos">Número de bloqueos</label>
+          <input type="number" id="numero-bloqueos">
+        </div>
+        <div class="item">
+          <label for="tiempo-entrada">Tiempo entrada</label>
+          <input type="number" id="tiempo-entrada">
+        </div>
+
+
+        <button onclick="addProceso()">Añadir proceso</button>
+        <button onclick="procesosPredefinidos()">Cargar procesos</button>
+
+      </div>
+
+      <button onclick="calcular()">Comenzar ejecución</button>
+    </div>
+
+    <table>
+      <tr>
+        <th>Proceso</th>
+        <th>TCC</th>
+        <th>TE</th>
+        <th>TVQ</th>
+        <th>TB</th>
+        <th>TI</th>
+        <th></th>
+        <th>TF</th>
+      </tr>
+    </table>
+  </div>
+</body>
