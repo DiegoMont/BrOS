@@ -9,6 +9,19 @@ class Proceso {
   }
 }
 
+class InfoProcesado {
+  constructor(idProceso, tcc, te, tvc, tb, tiempoTotal, ti, tf){
+    this.proceso = idProceso;
+    this.tcc = tcc;
+    this.te = te;
+    this.tvc = tvc;
+    this.tb = tb;
+    this.tt = tiempoTotal;
+    this.ti = ti;
+    this.tf = tf;
+  }
+}
+
 class Procesador {
   quantum = 0;
   tiempoBloqueo = 0;
@@ -21,30 +34,27 @@ class Procesador {
     this.tiempoCambioContexto = tcc;
     this.tiempoTerminacion = 0;
     this.procesosEjecutados = new Array();
+    this.libre = false;
   }
 
   correrProceso(proceso){
-    let tcc = this.tiempoTerminacion < proceso.tiempoEntrada || this.tiempoEntrada == 0 ? 0: this.tiempoCambioContexto;
+    //console.log(proceso.id+" "+this.tiempoTerminacion + "   " + proceso.tiempoEntrada);
+    let tcc = this.libre || this.tiempoTerminacion == 0 ? 0: this.tiempoCambioContexto;
     let tvc = (Math.ceil(proceso.tiempoEjecucion / this.quantum) - 1) * this.tiempoCambioContexto;
     let tb = proceso.numBloqueos * this.tiempoBloqueo;
     let tiempoTotal = tcc + proceso.tiempoEjecucion + tvc + tb;
-    this.procesosEjecutados.push(proceso.id);
+    //this.procesosEjecutados.push(proceso.id);
+    let ti = this.tiempoTerminacion;
     this.tiempoTerminacion += tiempoTotal;
-    console.log(tcc);
-    console.log(tvc);
-    console.log(tb);
-    console.log(tiempoTotal);
-    
+    let infoProcesado = new InfoProcesado(proceso.id, tcc, proceso.tiempoEjecucion, tvc, tb, tiempoTotal, ti, this.tiempoTerminacion);
+    this.procesosEjecutados.push(infoProcesado);
+    this.libre = false;
   }
 
   toString(){
-    console.log("Procesador " + this.id);
-    for (const proceso of this.procesosEjecutados) {
-      console.log(proceso);
-      
-    }
     
   }
+
 }
 
 class Queue {
@@ -92,11 +102,12 @@ class Entorno {
     while (proceso !== null) {
       let procesador = this.procesadores[0];
       let tiempoMinimo = 1000000;
-      console.log("Corriendo proceso " + proceso.id);
+      //console.log("Corriendo proceso " + proceso.id);
       for (let micro of this.procesadores) {
-        console.log("Procesador " + micro.id + ": " + micro.tiempoTerminacion);
+        //console.log("Procesador " + micro.id + ": " + micro.tiempoTerminacion);
         if(micro.tiempoTerminacion < proceso.tiempoEntrada){
           micro.tiempoTerminacion = proceso.tiempoEntrada;
+          micro.libre = true;
         }
         if (micro.tiempoTerminacion < tiempoMinimo) {
           procesador = micro;
@@ -106,11 +117,8 @@ class Entorno {
       procesador.correrProceso(proceso);
       proceso = this.colaProcesos.dequeue();
     }
-
-    for (const procesador of this.procesadores) {
-      procesador.toString();
-    }
   }
+
 }
 
 function main() {
@@ -136,6 +144,7 @@ function crearEntorno(){
   let bloqueo = Number.parseInt(document.getElementById("bloqueo").value);
   let tcc = Number.parseInt(document.getElementById("tcc").value);
   entorno = new Entorno(numProcesadores, quantum, bloqueo, tcc);
+  document.getElementById("cuerpo-entorno").classList.remove("ocultar");
   console.log(entorno);
 }
 
@@ -161,7 +170,7 @@ function procesosPredefinidos(){
   entorno.formarProceso(new Proceso("P", 800, 4, 4000));
   entorno.formarProceso(new Proceso("Ñ", 500, 3, 8000));
   console.log("Procesos cargados");
-  
+  displayProcesos();
 }
 
 function mostrarProcesos(){
@@ -181,8 +190,33 @@ function addProceso(){
   let ti = document.getElementById("tiempo-entrada").value;
   entorno.formarProceso(new Proceso(id, te, bloqueos, ti));
   console.log("Proceso añadido");
+  displayProcesos();
 }
 
 function calcular(){
   entorno.comenzarEjecucion();
+  dibujarTablas();
+}
+
+function displayProcesos(){
+  const divCola = document.getElementById("cola-procesos");
+  divCola.innerHTML = "";
+  for (const proceso of entorno.colaProcesos.lista) {
+    let element = document.createElement("p");
+    element.classList.add("proceso");
+    element.innerHTML = proceso.id;
+    divCola.appendChild(element);
+  }
+}
+
+function dibujarTablas() {
+  const espacioTablas = document.getElementById("espacio-tablas");
+  for (const procesador of entorno.procesadores) {
+    let stringTable = "<table><tr><th>Proceso</th><th>TCC</th><th>TE</th><th>TVC</th><th>TB</th><th>TT</th><th>TI</th><th>TF</th></tr>";
+    for (const i of procesador.procesosEjecutados) {
+      stringTable += "<tr><td>"+i.proceso+"</td><td>"+i.tcc+"</td><td>"+i.te+"</td><td>"+i.tvc+"</td><td>"+i.tb+"</td><td>"+i.tt+"</td><td>"+i.ti+"</td><td>"+i.tf+"</td></tr>";
+    }
+    stringTable += "</table>";
+    espacioTablas.innerHTML += stringTable;
+  }
 }
