@@ -76,6 +76,10 @@ button {
   border-radius: 5px;
 }
 
+table {
+  max-width: 45%;
+}
+
 .Procesos button {
     margin-top: 20px;
 }
@@ -89,6 +93,18 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin: 20px 0;
+}
+
+.tablas-procesadores, .menu-procesos {
+  display: inline-block;
+}
+
+.menu-procesos {
+  max-width: 30%;
+}
+
+.tablas-procesadores {
+  max-width: 60%;
 }
 
 .item label {
@@ -105,12 +121,17 @@ button {
   display: none;
 }
 
+.menu-procesos input, .menu-procesos button {
+  margin-bottom: 15px;
+}
+
 #cola-procesos {
-  border: 1px solid #3d3d3d;
+  /*border: 1px solid #3d3d3d;*/
 }
 
 #cola-procesos .proceso {
   text-align: center;
   display: inline-block;
   width: 30px;
+  border: 2px solid #000;
 }
