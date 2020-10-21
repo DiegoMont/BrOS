@@ -35,11 +35,11 @@
       <button onclick="crearEntorno()">Crear entorno</button>
     </div>
 
+    <section class="ocultar" id="cuerpo-entorno">
     <div id="cola-procesos" class=""></div>
 
-    <div class="Procesos">
-      <h2>Procesos</h2>
-      <div class="grid">
+    <div id="tablita">
+      <div class="menu-procesos">
         <div class="item">
           <label for="id">Nombre</label>
           <input type="text" id="id">
@@ -56,27 +56,35 @@
           <label for="tiempo-entrada">Tiempo entrada</label>
           <input type="number" id="tiempo-entrada">
         </div>
-
-
         <button onclick="addProceso()">Añadir proceso</button>
         <button onclick="procesosPredefinidos()">Cargar procesos</button>
-
       </div>
-
-      <button onclick="calcular()">Comenzar ejecución</button>
+      <div class="tablas-procesadores" id="espacio-tablas">
+        <!--<table>
+          <tr>
+            <th>Proceso</th>
+            <th>TCC</th>
+            <th>TE</th>
+            <th>TVC</th>
+            <th>TB</th>
+            <th>TT</th>
+            <th>TI</th>
+            <th>TF</th>
+          </tr>
+          <tr>
+            <td>B</td>
+            <td>0</td>
+            <td>300</td>
+            <td>0</td>
+            <td>30</td>
+            <td>330</td>
+            <td>0</td>
+            <td>330</td>
+          </tr>
+        </table>-->
+      </div>
     </div>
-
-    <table>
-      <tr>
-        <th>Proceso</th>
-        <th>TCC</th>
-        <th>TE</th>
-        <th>TVQ</th>
-        <th>TB</th>
-        <th>TI</th>
-        <th></th>
-        <th>TF</th>
-      </tr>
-    </table>
-  </div>
+    <button onclick="calcular()">Comenzar ejecución</button>
+</section>
 </body>
+</html>
